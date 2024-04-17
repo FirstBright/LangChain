@@ -27,7 +27,7 @@ class VectorStore:
     def add_document(self, doc):
         self.documents.append(doc)
 
-# 사용 예
+# 사용 예----- mian에 이식
 vector_store = VectorStore()
 crawler = Crawler(vector_store)
 url = 'http://yeslaw.com/lims/front/page/fulltext.html?pAct=view&pPromulgationNo=160392'  # 실제 크롤링할 URL로 교체 필요
