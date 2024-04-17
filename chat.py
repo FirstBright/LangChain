@@ -2,10 +2,15 @@ import os
 import gradio as gr
 from langchain_google_genai import ChatGoogleGenerativeAI
 from langchain.schema import AIMessage, HumanMessage
+from dotenv import load_dotenv
+
 
 class ChatBot:
     def __init__(self):
-        os.environ["GOOGLE_API_KEY"] = ""
+        api = load_dotenv()
+        if "GOOGLE_API_KEY" not in os.environ:
+            os.environ["GOOGLE_API_KEY"] = api
+
         self.chat = ChatGoogleGenerativeAI(model='gemini-pro', temperature=0)
 
     def response(self, message, history):
@@ -29,7 +34,6 @@ class ChatBot:
             undo_btn="이전챗 삭제",
             clear_btn="전챗 삭제"
         ).launch()
-        
-chatbot_instance = ChatBot()
 
+chatbot_instance = ChatBot()
 chatbot_instance.launch_chat_interface()
