@@ -1,10 +1,10 @@
-import gemini
 import retriever
 import logger
-# import chat
+from chat import ChatBot
 
-def main():
-    print('main')
+def main():    
+    chatbot = ChatBot()
+    chatbot.launch_chat_interface()
 
 if __name__ == "__main__":
     main()
