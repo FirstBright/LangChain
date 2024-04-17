@@ -4,7 +4,7 @@ from langchain_google_genai import ChatGoogleGenerativeAI
 from langchain_core.prompts import SystemMessagePromptTemplate, ChatPromptTemplate, MessagesPlaceholder
 
 if "GOOGLE_API_KEY" not in os.environ:
-    os.environ["GOOGLE_API_KEY"] = "AIzaSyC8NG7M4q27t9aV32h7a-fJkhebRHRt3mw"
+    os.environ["GOOGLE_API_KEY"] = "API 입력 예정"
 
 class GeminiClient:
     def __init__(self, model='gemini-pro', temperature=1.0):
