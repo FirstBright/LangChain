@@ -5,7 +5,7 @@ from langchain.schema import AIMessage, HumanMessage
 
 class ChatBot:
     def __init__(self):
-        os.environ["GOOGLE_API_KEY"] = "AIzaSyDvw9GE_kiApe3IhFLP4EligibR-Oh-fEU"
+        os.environ["GOOGLE_API_KEY"] = ""
         self.chat = ChatGoogleGenerativeAI(model='gemini-pro', temperature=0)
 
     def response(self, message, history):
