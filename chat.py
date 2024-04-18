@@ -11,7 +11,7 @@ class ChatBot:
         if "GOOGLE_API_KEY" not in os.environ:
             os.environ["GOOGLE_API_KEY"] = api
 
-        self.chat = ChatGoogleGenerativeAI(model='gemini-pro', temperature=0)
+        self.chat = ChatGoogleGenerativeAI(model='gemini-1.5-pro-latest', temperature=0)
 
     def response(self, message, history):
         history_langchain_format = []
