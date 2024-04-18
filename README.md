@@ -1,4 +1,8 @@
+
 LangChain Project
+
+![페이지 원본 gumgum_1](https://github.com/FirstBright/LangChain/assets/92439723/70c1c2dd-e5bf-41ee-8df0-98a98d316e76)
+
 # 🏗️ 건축사 설계사무소를 대상으로 한 대한민국 건축 법령 챗봇
 
 ## 📌 개요
