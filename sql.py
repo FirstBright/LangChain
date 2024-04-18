@@ -1,7 +1,6 @@
-from sqlalchemy import create_engine, Column, Integer, Text, exc
+from sqlalchemy import create_engine, Column, Integer, exc, String, ForeignKey
 from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy.orm import sessionmaker, exc as orm_exc
-from sqlalchemy.orm import session
+from sqlalchemy.orm import sessionmaker, declarative_base, relationship, exc
 from sqlalchemy.sql import exists
 from dotenv import load_dotenv
 import os
@@ -21,7 +20,8 @@ Session = sessionmaker(bind=engine)
 class Document(Base):
     __tablename__ = 'documents'
     id = Column(Integer, primary_key=True)
-    text = Column(Text, nullable=False)
+    text = Column(String)
+    question_id = Column(Integer, ForeignKey('questions.id'))
 
 # 데이터베이스 테이블 생성 테이블이 있는경우 무시
 Base.metadata.create_all(engine, checkfirst=True)
@@ -50,8 +50,8 @@ class SQLModule:
         self.session.close()
 
 # 사용 예 ---------main에 이식
-if __name__ == '__main__':
-    sql_module = SQLModule()
-    texts = documents
-    sql_module.insert_documents(texts)
-    sql_module.close()
+# if __name__ == '__main__':
+#     sql_module = SQLModule()
+#     texts = documents
+#     sql_module.insert_documents(texts)
+#     sql_module.close()
