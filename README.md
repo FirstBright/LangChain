@@ -4,6 +4,28 @@ LangChain Project
 ![페이지 원본 gumgum_1](https://github.com/FirstBright/LangChain/assets/92439723/70c1c2dd-e5bf-41ee-8df0-98a98d316e76)
 
 # 🏗️ 건축사 설계사무소를 대상으로 한 대한민국 건축 법령 챗봇
+## 사용방법
+git clone https://github.com/FirstBright/LangChain.git
+pip install -r requirements.txt
+
+# LangChain 설치 가이드
+
+다음 단계에 따라 로컬 머신에서 LangChain 프로젝트를 설정하세요.
+
+## 전제 조건
+
+시작하기 전에 컴퓨터에 git이 설치되어 있는지 확인하세요. git은 [여기](https://git-scm.com/downloads)에서 다운로드할 수 있습니다.
+
+## 1단계: 리포지토리 복제하기
+
+CLI(명령줄 인터페이스)를 열고 다음 명령을 입력하여 리포지토리를 복제합니다:
+
+```bash
+git clone https://github.com/FirstBright/LangChain.git
+cd LangChain
+pip install -r requirements.txt
+```
+
 
 ## 📌 개요
 건축물을 짓기 위한 가장 초기 단계에서는 클라이언트의 요구사항, 대지의 상태, 그리고 부지의 특성에 맞춰 계획을 세웁니다. 이후 컨셉 설계를 거쳐 기본 설계 단계에 이르게 되면, 시공이 가능한 건축물을 만들기 위해 행정구역의 건축 법규와 건축 법령 등을 적용하여 설계를 진행합니다. 그러나 대부분의 건축 설계 종사자들은 수많은 건축 법령의 내용을 모두 암기하고 있지 못하며, 매년 개정되는 법령에 대해서는 더욱 그렇습니다.
@@ -43,3 +65,9 @@ LangChain Project
 
 ### **5. 피드백 시스템 및 학습 메커니즘**
 - **개선 방안**: 사용자로부터 받은 피드백을 기반으로 챗봇의 응답을 지속적으로 개선할 수 있는 피드백 루프와 학습 메커니즘을 구현합니다. 사용자 피드백을 분석하여 챗봇의 정확도와 유용성을 지속적으로 향상시키는 시스템입니다.
+
+
+
+## University DB ( RDMDB )
+## ERD
+![ERD_1](https://github.com/FirstBright/LangChain/assets/92439723/19611216-f5b1-488b-9765-062202b33bb7)
