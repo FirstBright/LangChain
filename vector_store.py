@@ -6,7 +6,7 @@ from langchain_community.document_loaders import PyPDFLoader
 class Vector_store:   
     def process_pdf(self):
         # PDF 파일 로드
-        loader = PyPDFLoader("./건축법3.pdf")
+        loader = PyPDFLoader("./건축법2.pdf")
         docs = loader.load()
         # print(docs)
         # 텍스트 스플리터 생성
@@ -22,5 +22,5 @@ class Vector_store:
                                           embedding=GoogleGenerativeAIEmbeddings(model="models/embedding-001"))
       
         # 사용자 입력(질문)과 비교해서 가까운 K개의 결과 찾기        
-        return  vectordb.as_retriever(k=2)
+        return  vectordb.as_retriever(k=1)
 
