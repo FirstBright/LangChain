@@ -10,7 +10,7 @@ class Vector_store:
         docs = loader.load()
         # print(docs)
         # 텍스트 스플리터 생성
-        text_splitter = RecursiveCharacterTextSplitter(chunk_size=5000, chunk_overlap=500)
+        text_splitter = RecursiveCharacterTextSplitter(chunk_size=1000, chunk_overlap=100)
 
         # 스플리트된 텍스트들의 리스트 반환
         splits = text_splitter.split_documents(docs)

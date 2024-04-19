@@ -65,10 +65,13 @@ class Chat():
             | llm
             | StrOutputParser()
         )
-        # Store current question and response in memory
-        self.memory_buffer.add_message("Question: {question}")
-        self.memory_buffer.add_message("Answer: {context}")
-        return rag_chain.invoke(text)
+        question_message = f"Question: {text}"
+        response = rag_chain.invoke(text)
+        answer_message = f"Answer: {response}"
+        self.memory_buffer.add_message(question_message)
+        self.memory_buffer.add_message(answer_message)
+
+        return response
 
 class Chat_SQL():
     def __init__(self):
