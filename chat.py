@@ -1,4 +1,3 @@
-import os
 from dotenv import load_dotenv
 
 # 클래스 및 필요한 모듈 import
@@ -9,7 +8,6 @@ from langchain_core.output_parsers import StrOutputParser
 from langchain_core.runnables import RunnablePassthrough
 from langchain_community.utilities import SQLDatabase
 from langchain.callbacks.base import BaseCallbackHandler
-
 from vector_store import Vector_store
 
 
@@ -65,15 +63,21 @@ class Chat():
             | llm
             | StrOutputParser()
         )
+        
         # Store current question and response in memory
-        self.memory_buffer.add_message("Question: {question}")
-        self.memory_buffer.add_message("Answer: {context}")
-        return rag_chain.invoke(text)
+        question_message = f"Question: {text}"
+        response = rag_chain.invoke(text)
+        answer_message = f"Answer: {response}"
+        self.memory_buffer.add_message(question_message)
+        self.memory_buffer.add_message(answer_message)
+
+        return response
 
 class Chat_SQL():
     def __init__(self):
         self.mysql_uri = f"mysql+pymysql://{os.getenv('DB_USERNAME')}:{os.getenv('DB_PASSWORD')}@{os.getenv('DB_HOST')}:{os.getenv('DB_PORT')}/{os.getenv('DB_NAME')}"
         self.db = SQLDatabase.from_uri(self.mysql_uri)
+        self.memory_buffer = ConversationMemoryBuffer()
         
     def ask(self, user_question):
         template = '''Answer the question based only on the following context:
@@ -117,7 +121,12 @@ class Chat_SQL():
             | StrOutputParser()
         )
         
+        # Store current question and response in memory
+        question_message = f"Question: {user_question}"
+        response = sql_chain.invoke(chain_input)
+        answer_message = f"SQL Response: {response}"
+        self.memory_buffer.add_message(question_message)
+        self.memory_buffer.add_message(answer_message)
+        
         # Make sure to pass a dictionary to invoke
-        return sql_chain.invoke(chain_input)
-    
-    
+        return response
