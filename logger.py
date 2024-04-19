@@ -12,7 +12,7 @@ class Logger():
     def log_message(self, messages):      
         try:
             with open(logfile, 'a') as f:
-                f.write(f"{messages}")
+                f.write(f"{messages}\n")
             logging.info(f'Message successfully written to log.txt')
         except Exception as e:
             logging.error(f'Error {e}')
