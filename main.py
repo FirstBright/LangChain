@@ -1,5 +1,6 @@
 from chat import Chat, Chat_SQL
 import os
+import logger
 
 def main():
     os.environ.setdefault("GOOGLE_API_KEY", "Your_API_Key")
@@ -16,4 +17,3 @@ def main():
 if __name__ == "__main__":
     main()
 
-# 변경사항
