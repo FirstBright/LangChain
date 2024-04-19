@@ -9,7 +9,7 @@ from langchain_core.output_parsers import StrOutputParser
 from langchain_core.runnables import RunnablePassthrough
 from langchain_community.utilities import SQLDatabase
 from langchain.callbacks.base import BaseCallbackHandler
-
+from langchain.memory import ConversationBufferMemory
 from vector_store import Vector_store
 
 
@@ -20,7 +20,7 @@ class StreamCallback(BaseCallbackHandler):
         print(token, end="", flush=True)
         
 # 대화 기록을 저장하는 클래스
-class ConversationMemoryBuffer:
+class ConversationBufferMemory:
     def __init__(self, capacity=10): # 10개의 메시지를 저장할 수 있는 버퍼 생성
         self.capacity = capacity
         self.buffer = []
@@ -35,7 +35,7 @@ class ConversationMemoryBuffer:
 
 class Chat():
     def __init__(self):
-        self.memory_buffer = ConversationMemoryBuffer()
+        self.memory_buffer = ConversationBufferMemory()
         
     def ask(self, text):
         vector = Vector_store()
@@ -48,7 +48,7 @@ class Chat():
 
         prompt = ChatPromptTemplate.from_template(template)
         
-        self.memory_buffer = ConversationMemoryBuffer()
+        self.memory_buffer = ConversationBufferMemory()
         llm = ChatGoogleGenerativeAI(
             model="gemini-1.5-pro-latest",
             temperature=0,
