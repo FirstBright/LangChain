@@ -1,6 +1,6 @@
 import os
 import gradio as gr
-from chat import Chat, Chat_SQL
+from chat import Chat
 from logger import Logger
 
 def inference(message, *args):
@@ -8,23 +8,25 @@ def inference(message, *args):
     # 필요에 따라 이를 활용하거나 무시할 수 있습니다.
     return main(message)
 
+
+
 def main(text):
     os.environ.setdefault("GOOGLE_API_KEY", "AIzaSyA1g9sPAwHcScfVT_uu_UZWO14JKWWlmdE")
-    chat = Chat()
-    chat_sql = Chat_SQL()
+    chat = Chat(format_docs=Chat.format_docs)
+    # chat_sql = Chat_SQL()
     logger = Logger()
 
     logger.log_message("User : " + text)
     response_chat = chat.ask(text)
     logger.log_message("Answer : " + response_chat)
-    response_chat_sql = chat_sql.ask(text)
-    logger.log_message("Answer : " + response_chat_sql)
+    # response_chat_sql = chat_sql.ask(text)
+    # logger.log_message("Answer : " + response_chat_sql)
 
     #저장된 메세지 출력하는 부분
-    all_messages = chat.memory_buffer.get_all_messages()
-    print(all_messages)
+    # all_messages = chat.memory_buffer.get_all_messages()
+    # print(all_messages)
     
-    return f"Chat response: {response_chat}\nChat_SQL response: {response_chat_sql}"
+    return f"Chat response: {response_chat}" #\nChat_SQL response: {response_chat_sql}"
 
 
 

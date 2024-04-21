@@ -1,4 +1,3 @@
-import os
 from dotenv import load_dotenv
 
 # 클래스 및 필요한 모듈 import
@@ -18,7 +17,7 @@ load_dotenv()
 class StreamCallback(BaseCallbackHandler):
     def on_llm_new_token(self, token: str, **kwargs):
         print(token, end="", flush=True)
-        
+
 # 대화 기록을 저장하는 클래스
 class ConversationBufferMemory:
     def __init__(self, capacity=10): # 10개의 메시지를 저장할 수 있는 버퍼 생성
@@ -33,9 +32,14 @@ class ConversationBufferMemory:
     def get_all_messages(self):
         return " ".join(self.buffer)
 
+
 class Chat():
-    def __init__(self):
+    def __init__(self, format_docs):
         self.memory_buffer = ConversationBufferMemory()
+        self.format_docs = format_docs
+
+    def format_docs(self, docs):
+        return "\n\n".join(doc.page_content for doc in docs)
         
     def ask(self, text):
         vector = Vector_store()
@@ -48,7 +52,13 @@ class Chat():
 
         prompt = ChatPromptTemplate.from_template(template)
         
-        self.memory_buffer = ConversationBufferMemory()
+        # 이전 대화 내용 불러오기
+        previous_messages = self.memory_buffer.get_all_messages()
+        context_with_previous_messages = f"Previous conversation:\n{previous_messages}\n\n"
+        
+        # 이전 대화 내용을 포함한 새로운 context 생성
+        context = context_with_previous_messages + self.format_docs(retriever)
+       
         llm = ChatGoogleGenerativeAI(
             model="gemini-1.5-pro-latest",
             temperature=0,
@@ -56,11 +66,8 @@ class Chat():
             callbacks=[StreamCallback()],
         )
 
-        def format_docs(docs):
-            return "\n\n".join(doc.page_content for doc in docs)
-
         rag_chain = (
-            {"context": retriever | format_docs, "question": RunnablePassthrough()}
+            {"context": context, "question": RunnablePassthrough()}
             | prompt
             | llm
             | StrOutputParser()
@@ -73,54 +80,54 @@ class Chat():
 
         return response
 
-class Chat_SQL():
-    def __init__(self):
-        self.mysql_uri = f"mysql+pymysql://{os.getenv('DB_USERNAME')}:{os.getenv('DB_PASSWORD')}@{os.getenv('DB_HOST')}:{os.getenv('DB_PORT')}/{os.getenv('DB_NAME')}"
-        self.db = SQLDatabase.from_uri(self.mysql_uri)
+# class Chat_SQL():
+#     def __init__(self):
+#         self.mysql_uri = f"mysql+pymysql://{os.getenv('DB_USERNAME')}:{os.getenv('DB_PASSWORD')}@{os.getenv('DB_HOST')}:{os.getenv('DB_PORT')}/{os.getenv('DB_NAME')}"
+#         self.db = SQLDatabase.from_uri(self.mysql_uri)
         
-    def ask(self, user_question):
-        template = '''Answer the question based only on the following context:
-         {schema}
-         Question: {question}
-         SQL Query: {query}
-         SQL Response: {response}'''
+#     def ask(self, user_question):
+#         template = '''Answer the question based only on the following context:
+#          {schema}
+#          Question: {question}
+#          SQL Query: {query}
+#          SQL Response: {response}'''
 
-        prompt_response = ChatPromptTemplate.from_template(template)
+#         prompt_response = ChatPromptTemplate.from_template(template)
 
-        def get_schema():
-            return self.db.get_table_info()
+#         def get_schema():
+#             return self.db.get_table_info()
 
-        def run_query(query):
-            return self.db.run(query)
+#         def run_query(query):
+#             return self.db.run(query)
 
-        llm = ChatGoogleGenerativeAI(
-            model="gemini-1.5-pro-latest",
-            temperature=0,
-            streaming=True,
-            callbacks=[StreamCallback()],
-        )
+#         llm = ChatGoogleGenerativeAI(
+#             model="gemini-1.5-pro-latest",
+#             temperature=0,
+#             streaming=True,
+#             callbacks=[StreamCallback()],
+#         )
 
-        # Define your SQL query here based on the question
-        sql_query = "SELECT text FROM documents"  # Example SQL query
-        sql_result = run_query(sql_query)
-        schema = get_schema()
+#         # Define your SQL query here based on the question
+#         sql_query = "SELECT text FROM documents"  # Example SQL query
+#         sql_result = run_query(sql_query)
+#         schema = get_schema()
 
-        # Prepare the input for full_chain invocation
-        chain_input = {
-            "schema": schema,
-            "question": user_question,
-            "query": sql_query,
-            "response": sql_result
-        }
+#         # Prepare the input for full_chain invocation
+#         chain_input = {
+#             "schema": schema,
+#             "question": user_question,
+#             "query": sql_query,
+#             "response": sql_result
+#         }
 
-        sql_chain = (
-            RunnablePassthrough.assign()
-            | prompt_response
-            | llm.bind(stop=["\nSQLResult:"])
-            | StrOutputParser()
-        )
+#         sql_chain = (
+#             RunnablePassthrough.assign()
+#             | prompt_response
+#             | llm.bind(stop=["\nSQLResult:"])
+#             | StrOutputParser()
+#         )
         
-        # Make sure to pass a dictionary to invoke
-        return sql_chain.invoke(chain_input)
+#         # Make sure to pass a dictionary to invoke
+#         return sql_chain.invoke(chain_input)
     
     
